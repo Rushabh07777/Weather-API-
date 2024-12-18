@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Weather Forecast</h1>
+    <form id="myForm">
+        <input type="text" placeholder="Enter City Name" class="place" required>
+        <button class="find">Search</button>
+    </form>
+
+    <div class="my-container" style="display: none;">
+        
+    </div>
+
+    <script>
+        let form = document.getElementById('myForm');
+        let container = document.querySelector('.my-container');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let select = form.querySelector('input').value;
+            weather(select);
+        });
+
+        let api = '9a34130f777ed498b36997d75fe014a8';
+
+        async function weather(select) {
+            try {
+                let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${select}&appid=${api}&units=metric`);
+                let finalres = await res.json();
+                container.style.display = 'block';
+                container.innerHTML = `
+                    <h2>${finalres.name}</h2>
+                    <p>Temperature: ${finalres.main.temp}°C</p>
+                    <p>Humidity: ${finalres.main.humidity}%</p>
+                    <p>Condition: ${finalres.weather[0].description}</p>
+                `;
+
+            } catch (err) {
+                console.log(err.message);
+                alert('This City is not Availble!');
+            }
+        }
+        
+    </script>
+</body>
+
+</html>
+                             
